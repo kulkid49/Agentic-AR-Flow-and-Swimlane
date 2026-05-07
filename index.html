@@ -433,6 +433,206 @@
             font-size: 0.9rem;
         }
 
+        .walkthrough-btn {
+            margin-top: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            padding: 0.8rem 1.05rem;
+            border-radius: 999px;
+            border: 1px solid rgba(25, 94, 75, 0.22);
+            background: linear-gradient(145deg, #0B3F2E, #1D836B);
+            color: white;
+            font-weight: 800;
+            font-size: 0.9rem;
+            letter-spacing: 0.2px;
+            cursor: pointer;
+            box-shadow: 0 12px 26px rgba(30, 111, 92, 0.22);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+        }
+
+        .walkthrough-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 14px 30px rgba(30, 111, 92, 0.26);
+            filter: saturate(1.04);
+        }
+
+        .walkthrough-btn:active {
+            transform: translateY(0px);
+        }
+
+        .walkthrough-btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .wt-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+        }
+
+        .wt-overlay.active {
+            display: block;
+        }
+
+        .wt-spotlight {
+            position: absolute;
+            inset: 0;
+        }
+
+        .wt-panel {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(980px, calc(100vw - 2rem));
+            border-radius: 22px;
+            border: 1px solid rgba(226, 234, 240, 0.85);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 251, 250, 0.92));
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.24);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 1.05rem 1.15rem 1rem;
+        }
+
+        .wt-kicker {
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #1e6f5c;
+        }
+
+        .wt-title {
+            margin-top: 0.35rem;
+            font-weight: 900;
+            color: #0a2a36;
+            font-size: 1.2rem;
+            letter-spacing: -0.2px;
+            line-height: 1.25;
+        }
+
+        .wt-body {
+            margin-top: 0.85rem;
+            display: grid;
+            gap: 0.6rem;
+        }
+
+        .wt-line {
+            display: grid;
+            grid-template-columns: 110px 1fr;
+            gap: 0.7rem;
+            align-items: start;
+            padding: 0.75rem 0.85rem;
+            border-radius: 16px;
+            border: 1px solid rgba(226, 234, 240, 0.9);
+            background: rgba(255, 255, 255, 0.72);
+        }
+
+        .wt-line .label {
+            font-weight: 900;
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #1e6f5c;
+        }
+
+        .wt-line .text {
+            font-size: 0.86rem;
+            line-height: 1.35;
+            color: #103a49;
+        }
+
+        .wt-controls {
+            margin-top: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .wt-progress {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 0.8rem;
+            color: #2b7a64;
+        }
+
+        .wt-dots {
+            display: inline-flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            max-width: 520px;
+        }
+
+        .wt-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            background: rgba(30, 111, 92, 0.2);
+            border: 1px solid rgba(30, 111, 92, 0.25);
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+
+        .wt-dot.active {
+            background: #1e6f5c;
+            transform: scale(1.1);
+        }
+
+        .wt-buttons {
+            display: inline-flex;
+            gap: 0.6rem;
+            align-items: center;
+        }
+
+        .wt-btn {
+            border: none;
+            cursor: pointer;
+            font-weight: 900;
+            font-size: 0.85rem;
+            padding: 0.7rem 0.95rem;
+            border-radius: 999px;
+            transition: transform 0.12s ease, filter 0.12s ease, opacity 0.12s ease;
+        }
+
+        .wt-btn:active {
+            transform: translateY(1px);
+        }
+
+        .wt-btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .wt-btn.primary {
+            background: linear-gradient(145deg, #0B3F2E, #1D836B);
+            color: white;
+            box-shadow: 0 10px 24px rgba(30, 111, 92, 0.22);
+        }
+
+        .wt-btn.secondary {
+            background: #eef5f4;
+            color: #1e6f5c;
+            border: 1px solid rgba(30, 111, 92, 0.2);
+        }
+
+        .wt-btn.ghost {
+            background: transparent;
+            color: #2c5a6e;
+            border: 1px solid rgba(88, 139, 122, 0.35);
+        }
+
+        @media (max-width: 700px) {
+            .wt-line {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 850px) {
             .grid { grid-template-columns: 1fr; }
             body { padding: 1rem; }
@@ -445,6 +645,7 @@
     <div class="header">
         <h1>🤖 Agentic AI · OTC-AR Journey</h1>
         <div class="sub">Autonomous multi-agent finance | SAP S/4HANA vs D365 BC vs AI Agent Exclusive</div>
+        <button id="walkthroughStartBtn" class="walkthrough-btn">▶ Play Walkthrough Demo</button>
     </div>
 
     <!-- TABS -->
@@ -500,6 +701,35 @@
     <footer>🔁 Agent Exclusive = cannot be achieved by standard ERP modules nor custom automation (RPA, Power Automate, ABAP). Swimlane: click any active cell to see detailed agent cards filtered by that phase; the "Agent Details" tab will flash blue.</footer>
 </div>
 
+<div id="walkthroughOverlay" class="wt-overlay" aria-hidden="true">
+    <svg class="wt-spotlight" id="wtSpotlightSvg" width="100%" height="100%" preserveAspectRatio="none">
+        <defs>
+            <mask id="wtMask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse">
+                <rect id="wtMaskBg" x="0" y="0" width="0" height="0" fill="white"></rect>
+                <rect id="wtHole" x="0" y="0" width="0" height="0" rx="18" ry="18" fill="black"></rect>
+            </mask>
+        </defs>
+        <rect id="wtDimRect" x="0" y="0" width="0" height="0" fill="rgba(4, 16, 22, 0.72)" mask="url(#wtMask)"></rect>
+        <rect id="wtHoleRing" x="0" y="0" width="0" height="0" rx="18" ry="18" fill="none" stroke="rgba(255, 217, 102, 0.95)" stroke-width="3"></rect>
+    </svg>
+    <div class="wt-panel" id="wtPanel" role="dialog" aria-modal="true">
+        <div class="wt-kicker" id="wtKicker"></div>
+        <div class="wt-title" id="wtTitle"></div>
+        <div class="wt-body" id="wtBody"></div>
+        <div class="wt-controls">
+            <div class="wt-progress">
+                <span id="wtProgressText"></span>
+                <div class="wt-dots" id="wtDots"></div>
+            </div>
+            <div class="wt-buttons">
+                <button id="wtBackBtn" class="wt-btn secondary">Back</button>
+                <button id="wtNextBtn" class="wt-btn primary">Next</button>
+                <button id="wtExitBtn" class="wt-btn ghost">Exit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     // --------------------------------------------------------------
     // FULL AGENTS DATASET
@@ -539,12 +769,17 @@
     function renderCards() {
         const container = document.getElementById("agentsGrid");
         if (!container) return;
-        const filtered = currentPhaseFilter === "all" ? fullAgents : fullAgents.filter(a => a.phase === currentPhaseFilter);
-        if (filtered.length === 0) {
+        const filteredIndices = currentPhaseFilter === "all"
+            ? fullAgents.map((_, i) => i)
+            : fullAgents.map((a, i) => a.phase === currentPhaseFilter ? i : null).filter(i => i !== null);
+
+        if (filteredIndices.length === 0) {
             container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:3rem;">🤖 No agents for selected phase.</div>`;
             return;
         }
-        container.innerHTML = filtered.map(agent => `
+        container.innerHTML = filteredIndices.map(i => {
+            const agent = fullAgents[i];
+            return `
             <div class="agent-card">
                 <div class="card-top">
                     <div class="agent-name">${agent.name}<span class="step-badge">${agent.step}</span></div>
@@ -563,7 +798,14 @@
                     <div class="io-block"><div class="io-label">📤 OUTPUT</div><div class="io-text">${agent.output}</div></div>
                 </div>
             </div>
-        `).join("");
+            `;
+        }).join("");
+
+        document.querySelectorAll(".agent-card").forEach((cardEl, idx) => {
+            const agentIndex = filteredIndices[idx];
+            cardEl.setAttribute("data-agent-index", String(agentIndex));
+            cardEl.setAttribute("data-step", fullAgents[agentIndex].step);
+        });
     }
 
     function setupCardFilters() {
@@ -675,9 +917,325 @@
         });
     }
 
+    const wt = (() => {
+        const overlay = document.getElementById("walkthroughOverlay");
+        const startBtn = document.getElementById("walkthroughStartBtn");
+        const panel = document.getElementById("wtPanel");
+        const kickerEl = document.getElementById("wtKicker");
+        const titleEl = document.getElementById("wtTitle");
+        const bodyEl = document.getElementById("wtBody");
+        const progressEl = document.getElementById("wtProgressText");
+        const dotsEl = document.getElementById("wtDots");
+        const backBtn = document.getElementById("wtBackBtn");
+        const nextBtn = document.getElementById("wtNextBtn");
+        const exitBtn = document.getElementById("wtExitBtn");
+
+        const maskBg = document.getElementById("wtMaskBg");
+        const dimRect = document.getElementById("wtDimRect");
+        const hole = document.getElementById("wtHole");
+        const holeRing = document.getElementById("wtHoleRing");
+
+        let active = false;
+        let busy = false;
+        let index = 0;
+        let savedState = null;
+
+        const steps = [];
+        fullAgents.forEach((agent, agentIndex) => {
+            const nameTrimmed = agent.name.replace(/^\s+|\s+$/g, "");
+            const m = agent.step.match(/^Step\s+(\d+)-(\d+):\s*(.*)$/);
+            if (m) {
+                const start = Number(m[1]);
+                const end = Number(m[2]);
+                const label = m[3];
+                const custom = (start === 13 && end === 14 && /Payment Receipt\s*&\s*Cash App/i.test(label))
+                    ? ["Payment Receipt", "Cash Application"]
+                    : null;
+                for (let s = start; s <= end; s++) {
+                    steps.push({
+                        agentIndex,
+                        phase: agent.phase,
+                        title: `Step ${s}: ${(custom ? custom[s - start] : label)} — ${nameTrimmed}`
+                    });
+                }
+                return;
+            }
+            steps.push({
+                agentIndex,
+                phase: agent.phase,
+                title: `${agent.step} — ${nameTrimmed}`
+            });
+        });
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function getActiveTabId() {
+            const t = document.querySelector(".tab-btn.active");
+            return t ? t.getAttribute("data-tab") : "cards";
+        }
+
+        function setActiveTab(tabId) {
+            const btn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+            if (btn) btn.click();
+        }
+
+        function setPhaseFilter(phase) {
+            const btn = Array.from(document.querySelectorAll("#phaseFilter .filter-btn"))
+                .find(b => b.getAttribute("data-phase") === phase);
+            if (btn) btn.click();
+        }
+
+        function ensureSwimlaneBuilt() {
+            if (!window._swimlaneBuilt) {
+                renderSwimlane();
+                window._swimlaneBuilt = true;
+            }
+        }
+
+        async function waitFor(getter, timeoutMs = 1800) {
+            const start = performance.now();
+            while (performance.now() - start < timeoutMs) {
+                const v = getter();
+                if (v) return v;
+                await sleep(40);
+            }
+            return null;
+        }
+
+        function clearBody() {
+            while (bodyEl.firstChild) bodyEl.removeChild(bodyEl.firstChild);
+        }
+
+        function addLine(label, text) {
+            const row = document.createElement("div");
+            row.className = "wt-line";
+            const l = document.createElement("div");
+            l.className = "label";
+            l.textContent = label;
+            const t = document.createElement("div");
+            t.className = "text";
+            t.textContent = text;
+            row.appendChild(l);
+            row.appendChild(t);
+            bodyEl.appendChild(row);
+        }
+
+        function setPanelPosition(targetRect) {
+            if (!panel) return;
+            const shouldPinTop = targetRect && targetRect.bottom > window.innerHeight * 0.68;
+            panel.style.top = shouldPinTop ? "1.1rem" : "";
+            panel.style.bottom = shouldPinTop ? "" : "1.1rem";
+        }
+
+        function syncSvgSize() {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            if (maskBg) {
+                maskBg.setAttribute("width", String(w));
+                maskBg.setAttribute("height", String(h));
+            }
+            if (dimRect) {
+                dimRect.setAttribute("width", String(w));
+                dimRect.setAttribute("height", String(h));
+            }
+        }
+
+        function setSpotlightRect(rect) {
+            syncSvgSize();
+            const pad = 14;
+            const x = Math.max(10, rect.left - pad);
+            const y = Math.max(10, rect.top - pad);
+            const w = Math.min(window.innerWidth - x - 10, rect.width + pad * 2);
+            const h = Math.min(window.innerHeight - y - 10, rect.height + pad * 2);
+
+            hole.setAttribute("x", String(x));
+            hole.setAttribute("y", String(y));
+            hole.setAttribute("width", String(w));
+            hole.setAttribute("height", String(h));
+
+            holeRing.setAttribute("x", String(x));
+            holeRing.setAttribute("y", String(y));
+            holeRing.setAttribute("width", String(w));
+            holeRing.setAttribute("height", String(h));
+        }
+
+        function setSpotlightNone() {
+            syncSvgSize();
+            hole.setAttribute("x", "0");
+            hole.setAttribute("y", "0");
+            hole.setAttribute("width", "0");
+            hole.setAttribute("height", "0");
+            holeRing.setAttribute("x", "0");
+            holeRing.setAttribute("y", "0");
+            holeRing.setAttribute("width", "0");
+            holeRing.setAttribute("height", "0");
+        }
+
+        function updateProgress() {
+            progressEl.textContent = `Step ${index + 1} / ${steps.length}`;
+            dotsEl.querySelectorAll(".wt-dot").forEach((d, i) => {
+                d.classList.toggle("active", i === index);
+            });
+            backBtn.disabled = index === 0 || busy;
+            nextBtn.textContent = index === steps.length - 1 ? "Finish" : "Next";
+            nextBtn.disabled = busy;
+        }
+
+        async function showPhaseInterlude(phase) {
+            setActiveTab("swimlane");
+            ensureSwimlaneBuilt();
+            await sleep(60);
+            const phaseIdx = phaseOrder.indexOf(phase);
+            const headerEl = document.querySelector(`#phaseHeadersContainer .phase-header:nth-child(${phaseIdx + 1})`);
+            if (headerEl) {
+                headerEl.scrollIntoView({ behavior: "smooth", block: "start" });
+                await sleep(260);
+                setSpotlightRect(headerEl.getBoundingClientRect());
+                await sleep(520);
+            }
+        }
+
+        async function runStep(i) {
+            if (!active) return;
+            busy = true;
+            updateProgress();
+
+            const step = steps[i];
+            const agent = fullAgents[step.agentIndex];
+            const phaseChanged = i === 0 || steps[i - 1].phase !== step.phase;
+
+            kickerEl.textContent = phaseChanged ? step.phase : "In-process automation";
+            titleEl.textContent = step.title;
+            clearBody();
+            addLine("Input", agent.input);
+            addLine("Agentic Op", agent.agentOpSummary);
+            addLine("Output", agent.output);
+
+            if (phaseChanged) {
+                await showPhaseInterlude(step.phase);
+            }
+
+            setActiveTab("cards");
+            await sleep(40);
+            setPhaseFilter(step.phase);
+
+            const card = await waitFor(() => document.querySelector(`.agent-card[data-agent-index="${step.agentIndex}"]`));
+            if (card) {
+                card.scrollIntoView({ behavior: "smooth", block: "start" });
+                await sleep(260);
+                const rect = card.getBoundingClientRect();
+                setPanelPosition(rect);
+                setSpotlightRect(rect);
+            } else {
+                setPanelPosition(null);
+                setSpotlightNone();
+            }
+
+            busy = false;
+            updateProgress();
+        }
+
+        function buildDots() {
+            dotsEl.innerHTML = "";
+            for (let i = 0; i < steps.length; i++) {
+                const d = document.createElement("div");
+                d.className = "wt-dot";
+                dotsEl.appendChild(d);
+            }
+        }
+
+        async function start() {
+            if (active) return;
+            active = true;
+            index = 0;
+            busy = false;
+
+            savedState = {
+                tab: getActiveTabId(),
+                phase: currentPhaseFilter,
+                scrollY: window.scrollY
+            };
+
+            buildDots();
+            syncSvgSize();
+            overlay.classList.add("active");
+            overlay.setAttribute("aria-hidden", "false");
+            startBtn.disabled = true;
+
+            updateProgress();
+            await runStep(index);
+        }
+
+        function restoreState() {
+            if (!savedState) return;
+            setActiveTab(savedState.tab);
+            if (savedState.tab === "swimlane") ensureSwimlaneBuilt();
+            if (savedState.phase) setPhaseFilter(savedState.phase);
+            window.scrollTo({ top: savedState.scrollY || 0, behavior: "auto" });
+        }
+
+        function exit() {
+            if (!active) return;
+            active = false;
+            busy = false;
+            overlay.classList.remove("active");
+            overlay.setAttribute("aria-hidden", "true");
+            startBtn.disabled = false;
+            setSpotlightNone();
+            restoreState();
+        }
+
+        async function next() {
+            if (!active || busy) return;
+            if (index >= steps.length - 1) {
+                exit();
+                return;
+            }
+            index += 1;
+            await runStep(index);
+        }
+
+        async function back() {
+            if (!active || busy) return;
+            if (index <= 0) return;
+            index -= 1;
+            await runStep(index);
+        }
+
+        function bind() {
+            if (startBtn) startBtn.addEventListener("click", start);
+            if (overlay) {
+                overlay.addEventListener("wheel", e => e.preventDefault(), { passive: false });
+                overlay.addEventListener("touchmove", e => e.preventDefault(), { passive: false });
+            }
+            if (nextBtn) nextBtn.addEventListener("click", next);
+            if (backBtn) backBtn.addEventListener("click", back);
+            if (exitBtn) exitBtn.addEventListener("click", exit);
+
+            window.addEventListener("keydown", (e) => {
+                if (!active) return;
+                if (e.key === "Escape") exit();
+                if (e.key === "ArrowRight") next();
+                if (e.key === "ArrowLeft") back();
+            });
+
+            window.addEventListener("resize", () => {
+                if (!active) return;
+                if (busy) return;
+                syncSvgSize();
+                runStep(index);
+            });
+        }
+
+        return { bind };
+    })();
+
     renderCards();
     setupCardFilters();
     initTabs();
+    wt.bind();
 </script>
 </body>
 </html>
