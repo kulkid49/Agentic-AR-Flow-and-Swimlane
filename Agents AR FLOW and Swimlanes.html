@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Agentic AI OTC-AR | Agent Cards + Interactive Swimlane Diagram</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            background: #f0f4f8;
+            padding: 2rem 1.5rem;
+            color: #0a2a36;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 1rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(145deg, #0B3F2E, #1D836B);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+
+        .sub {
+            color: #2c6e5c;
+            margin-top: 0.5rem;
+            font-weight: 500;
+            border-left: 4px solid #2c9b7c;
+            padding-left: 1rem;
+        }
+
+        /* TABS */
+        .tab-bar {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1.8rem 0 0rem 0;
+            border-bottom: 2px solid #cbdde3;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 0.7rem 1.5rem;
+            border-radius: 2rem 2rem 0 0;
+            cursor: pointer;
+            color: #4c6a78;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #1e6f5c;
+            border-bottom: 3px solid #1e6f5c;
+            box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.02);
+        }
+
+        .tab-btn.tab-highlight {
+            background: #1e6f5c !important;
+            color: white !important;
+            border-bottom: 3px solid #ffd966 !important;
+            transition: 0.1s;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fade 0.2s ease;
+        }
+
+        .tab-content.active-tab {
+            display: block;
+        }
+
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(5px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        /* FILTER & LEGEND (cards tab) */
+        .filter-wrapper {
+            background: white;
+            border-radius: 28px;
+            padding: 0.8rem 1.2rem;
+            margin: 1.5rem 0 1.8rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+            border: 1px solid #e2eaf0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .filter-btn {
+            background: #f1f5f9;
+            border: none;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #2c5a6e;
+            white-space: nowrap;
+        }
+
+        .filter-btn.active {
+            background: #1e6f5c;
+            color: white;
+            box-shadow: 0 2px 10px rgba(30, 111, 92, 0.2);
+        }
+
+        .legend-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            background: white;
+            border-radius: 28px;
+            padding: 0.8rem 1.5rem;
+            margin: 0 0 1.5rem 0;
+            font-size: 0.7rem;
+            font-weight: 600;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+        }
+
+        /* CARDS GRID */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+            gap: 1.8rem;
+            margin-top: 1rem;
+        }
+
+        .agent-card {
+            background: white;
+            border-radius: 2rem;
+            overflow: hidden;
+            transition: all 0.2s;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid #dde7ed;
+        }
+
+        .card-top {
+            padding: 1.2rem 1.5rem 0.8rem;
+            background: #fbfefd;
+            border-bottom: 2px solid #e6f0ef;
+        }
+
+        .agent-name {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #175e4b;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .step-badge {
+            background: #e0eff5;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #1b6b56;
+        }
+
+        .phase-tag {
+            font-size: 0.7rem;
+            background: #f1f3f4;
+            border-radius: 20px;
+            padding: 0.2rem 0.7rem;
+            color: #3f6b5e;
+        }
+
+        .card-body {
+            padding: 1.2rem 1.5rem;
+        }
+
+        .io-block {
+            background: #f9fcfb;
+            border-radius: 20px;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border-left: 5px solid #80c0b0;
+        }
+
+        .io-label {
+            font-weight: 700;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #2b7a64;
+            margin-bottom: 0.4rem;
+        }
+
+        .io-text {
+            font-size: 0.82rem;
+            line-height: 1.4;
+            color: #1f5062;
+        }
+
+        .process-compare {
+            margin-top: 0.6rem;
+        }
+
+        .compare-item {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 0.7rem;
+            margin-bottom: 0.7rem;
+            border: 1px solid #eef2f0;
+        }
+
+        .compare-title {
+            font-weight: 700;
+            font-size: 0.7rem;
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+            margin-bottom: 0.25rem;
+        }
+
+        .exclusive {
+            color: #bc4e2c;
+            border-left: 3px solid #bc4e2c;
+            padding-left: 0.6rem;
+        }
+
+        .sap-std { color: #0b5e7e; border-left: 3px solid #0b5e7e; padding-left: 0.6rem; }
+        .sap-cust { color: #2c6e9e; border-left: 3px solid #2c6e9e; padding-left: 0.6rem; }
+        .d365-std { color: #1f7b6e; border-left: 3px solid #1f7b6e; padding-left: 0.6rem; }
+        .d365-cust { color: #4c8b7a; border-left: 3px solid #4c8b7a; padding-left: 0.6rem; }
+
+        .desc-text {
+            font-size: 0.76rem;
+            color: #2c3f48;
+            margin-top: 0.2rem;
+            line-height: 1.35;
+        }
+
+        .agent-op {
+            background: #ecf7f3;
+            border-radius: 16px;
+            padding: 0.6rem;
+            margin-top: 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #146954;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            font-size: 0.7rem;
+            color: #5d7e8c;
+        }
+
+        /* ========= SWIMLANE STYLES ========= */
+        .swimlane-container {
+            background: white;
+            border-radius: 24px;
+            padding: 25px 25px 25px 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            overflow-x: auto;
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .swimlane-wrapper {
+            min-width: 1350px;
+            position: relative;
+        }
+        /* Sticky phase headers */
+        .phase-headers {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+            margin-bottom: 15px;
+            padding-left: 220px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: white;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+        .phase-header {
+            background: linear-gradient(135deg, #1e6f5c, #2c9b7c);
+            color: white;
+            padding: 16px 10px;
+            border-radius: 16px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(30,111,92,0.3);
+        }
+        .swimlane-row {
+            display: grid;
+            grid-template-columns: 210px repeat(6, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+            align-items: center;
+        }
+        .agent-lane-label {
+            background: #f0f7f4;
+            border: 3px solid #1e6f5c;
+            padding: 14px 16px;
+            border-radius: 16px;
+            font-weight: 700;
+            color: #0f5a48;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(30,111,92,0.15);
+            word-break: break-word;
+        }
+        .swimlane-cell {
+            background: #ffffff;
+            border: 2px solid #d1e8e0;
+            border-radius: 18px;
+            padding: 14px;
+            min-height: 200px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .swimlane-cell:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 30px rgba(30,111,92,0.25);
+            border-color: #1e6f5c;
+            background: #fefffb;
+        }
+        .swimlane-cell.empty {
+            background: #f8faf9;
+            border-style: dashed;
+            border-color: #c8d9d2;
+            cursor: default;
+        }
+        .swimlane-cell.empty:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        .cell-step {
+            font-size: 0.73rem;
+            font-weight: 700;
+            color: #1e6f5c;
+            margin-bottom: 4px;
+        }
+        .cell-title {
+            font-weight: 800;
+            font-size: 1rem;
+            color: #0f5a48;
+            line-height: 1.25;
+            margin-bottom: 8px;
+        }
+        .cell-detail {
+            font-size: 0.73rem;
+            line-height: 1.4;
+            color: #1f3a44;
+        }
+        .io-pill {
+            padding: 2px 9px;
+            border-radius: 20px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        .io-in { background:#dbeafe; color:#1e4a7c; }
+        .io-out { background:#d1f0e0; color:#1e6f5c; }
+        .agentic-pill {
+            background: #f3e8ff;
+            color: #6b21a5;
+            padding: 2px 9px;
+            border-radius: 20px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        .legend-swim {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 850px) {
+            .grid { grid-template-columns: 1fr; }
+            body { padding: 1rem; }
+            .filter-buttons { overflow-x: auto; flex-wrap: nowrap; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🤖 Agentic AI · OTC-to-AR Deep Comparison</h1>
+        <div class="sub">Autonomous multi-agent finance | SAP S/4HANA vs D365 BC vs AI Agent Exclusive</div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tab-bar">
+        <button class="tab-btn active" data-tab="cards" id="cardsTabBtn">📋 Agent Details (SAP/D365 Comparison)</button>
+        <button class="tab-btn" data-tab="swimlane" id="swimlaneTabBtn">🏊 Swimlane Diagram · Agents vs Phases</button>
+    </div>
+
+    <!-- TAB 1: AGENT CARDS (full details, with filters) -->
+    <div id="cardsTab" class="tab-content active-tab">
+        <div class="filter-wrapper">
+            <div class="filter-buttons" id="phaseFilter">
+                <button data-phase="all" class="filter-btn active">📌 ALL PHASES</button>
+                <button data-phase="Phase 1: Customer Validation/Onboarding & PO acceptance" class="filter-btn">Phase 1 · Customer Validation</button>
+                <button data-phase="Phase 2: Sales Order Processing" class="filter-btn">Phase 2 · Sales Order</button>
+                <button data-phase="Phase 3: Fulfilment & Logistics" class="filter-btn">Phase 3 · Fulfilment</button>
+                <button data-phase="Phase 4: Intelligent Billing" class="filter-btn">Phase 4 · Intelligent Billing</button>
+                <button data-phase="Phase 5: Accounts Receivable Automation" class="filter-btn">Phase 5 · AR Automation</button>
+                <button data-phase="Phase 6: Payment & Closure" class="filter-btn">Phase 6 · Payment & Closure</button>
+            </div>
+            <div style="font-size:0.7rem; color:#588b7a;">⚡ click phase to filter cards</div>
+        </div>
+        <div class="legend-bar">
+            <div class="legend-item"><div class="badge" style="background:#bc4e2c;"></div> Agent Exclusive (no ERP/std automation)</div>
+            <div class="legend-item"><div class="badge" style="background:#0b5e7e;"></div> Standard SAP Module</div>
+            <div class="legend-item"><div class="badge" style="background:#2c6e9e;"></div> Custom SAP Config + Automation</div>
+            <div class="legend-item"><div class="badge" style="background:#1f7b6e;"></div> Standard D365 BC Module</div>
+            <div class="legend-item"><div class="badge" style="background:#4c8b7a;"></div> Custom D365 BC Config + Automation</div>
+        </div>
+        <div id="agentsGrid" class="grid"></div>
+    </div>
+
+    <!-- TAB 2: SWIMLANE DIAGRAM (interactive matrix) -->
+    <div id="swimlaneTab" class="tab-content">
+        <div class="legend-swim">
+            <strong>📊 Swimlane Legend:</strong>
+            <span><span class="io-pill io-in">INPUT</span> From previous step / ERP</span>
+            <span><span class="agentic-pill">⚡ AGENTIC OP</span> Unique AI reasoning</span>
+            <span><span class="io-pill io-out">OUTPUT</span> To next step</span>
+            <span>🔵 <strong>Click any box</strong> → Cards tab highlights in blue & filters by phase</span>
+            <span>📍 Phase headers stay floating when scrolling</span>
+        </div>
+        <div class="swimlane-container" id="swimlaneContainer">
+            <div class="swimlane-wrapper">
+                <!-- Phase Headers -->
+                <div class="phase-headers" id="phaseHeadersContainer"></div>
+                <!-- Swimlane Rows will be injected here -->
+                <div id="swimlane-rows"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>🔁 Agent Exclusive = cannot be achieved by standard ERP modules nor custom automation (RPA, Power Automate, ABAP). Swimlane: click any active cell to see detailed agent cards filtered by that phase; the "Agent Details" tab will flash blue.</footer>
+</div>
+
+<script>
+    // --------------------------------------------------------------
+    // FULL AGENTS DATASET
+    // --------------------------------------------------------------
+    const fullAgents = [
+        { name: "🧠 Extractor Agent (Orchestrator+Extractor)", step: "Step 1: PO Receipt", phase: "Phase 1: Customer Validation/Onboarding & PO acceptance", input: "Incoming unstructured PO: email, PDF attachment, EDI, portal upload; scanned documents.", output: "Structured JSON: customer details, materials, quantities, delivery dates, pricing, tax info, PO reference.", exclusive: "NLP + Generative AI ingests unstructured emails, PDFs, images regardless of layout; auto-adapts to new customer templates without remapping; extracts entities with master data cross-check. Handles language variations & typos.", sapStandard: "Manual data entry (VA01) or structured EDI/IDoc; VIM/OpenText for semi-structured OCR (requires template mapping).", sapCustom: "OCR + template mapping via OpenText/VIM; RPA for email/PDF scraping; custom ABAP workflow triggers.", d365Standard: "Manual sales order entry or import from email/portal attachments; basic document attachment.", d365Custom: "Power Automate flows triggered by email; AI Builder OCR for extraction + import to sales order.", agentOpSummary: "Autonomous ingestion, NLP entity extraction, zero-shot layout adaptation → validated JSON." },
+        { name: "👥 Customer Agent", step: "Step 2: Customer Master Check", phase: "Phase 1: Customer Validation/Onboarding & PO acceptance", input: "Structured PO JSON + existing customer master data (BP, XD03).", output: "Validated/created customer master, credit limit status, enriched JSON, duplicate resolution notes.", exclusive: "AI-powered fuzzy semantic search using embeddings to detect near-duplicates. Autonomous creation of master record & initial credit limit, cross-language variant handling.", sapStandard: "Exact/phonetic duplicate check in BP/XD01/XD03; manual creation (XD01) and updates.", sapCustom: "MDG + BRF+ for enhanced duplicate rules; BAPI/BDC for automated creation/updates.", d365Standard: "Basic duplicate detection on customer card creation; credit limit & master data in customer card.", d365Custom: "Power Automate + Azure AI fuzzy matching; custom AL extensions for onboarding workflows.", agentOpSummary: "Semantic duplicate detection, autonomous master creation, completeness enrichment." },
+        { name: "📊 Credit Risk Agent", step: "Step 3: Credit Pre-Assessment", phase: "Phase 1: Customer Validation/Onboarding & PO acceptance", input: "Customer credit master, open AR aging (FBL5N), historical payment behavior, proposed order value + external bureau data.", output: "Risk score, approved credit limit, hold flag, dynamic risk notes + enriched order JSON.", exclusive: "Real-time fusion of internal aging/history + external bureau (D&B) data; predictive risk scoring with dynamic temporary limits / holds; explainable reasoning (natural language).", sapStandard: "FSCM-CR predefined rules on internal data; credit block during order creation.", sapCustom: "Scheduled external score imports + BRF+ rules; custom workflows for pre-checks.", d365Standard: "Credit limits & holds in customer master; basic credit rules.", d365Custom: "Power Automate for external bureau integration & approval flows; custom scoring logic.", agentOpSummary: "Multi-signal real-time risk assessment + predictive modeling + dynamic limit adjustments." },
+        { name: "🔄 Orchestrator Agent (Order Creation)", step: "Step 4: Sales Order Creation", phase: "Phase 2: Sales Order Processing", input: "Approved credit assessment + enriched order JSON, ATP, pricing.", output: "Created Sales Order number, schedule lines, credit status, availability confirmation.", exclusive: "Closed-loop autonomy: detect credit block → invoke Credit Agent → re-evaluate recent payments → temporary limit adjust → retry SO creation. Only escalates true exceptions.", sapStandard: "BAPI_SALESORDER_CREATEFROMDAT2 with ATP, pricing, credit checks; manual block resolution (VKM1).", sapCustom: "Custom workflows route blocks; BAPI retries with limited logic.", d365Standard: "Sales order creation with ATP, pricing, credit checks; workflow approvals.", d365Custom: "Power Automate for block handling & re-processing; custom AL for enhanced validation.", agentOpSummary: "Autonomous credit block resolution and order retry with agent collaboration." },
+        { name: "📨 Orchestrator Agent (Confirmation)", step: "Step 5: Order Confirmation", phase: "Phase 2: Sales Order Processing", input: "Full Sales Order details; output determination data.", output: "Order confirmation sent status, confirmation document, lifecycle state: Fulfilment Pending.", exclusive: "Intelligent context-aware confirmation – personalized content based on customer risk/history; multi-channel adaptivity.", sapStandard: "Output determination (email/EDI) via NACE/VV11; automatic or manual trigger.", sapCustom: "Custom output routines & workflows; event-based triggers.", d365Standard: "Automatic order confirmation via workflows or posting.", d365Custom: "Power Automate for multi-channel confirmations & custom templates.", agentOpSummary: "Personalized confirmation + real-time lifecycle logging." },
+        { name: "🚚 Billing Agent (Event Subscriber)", step: "Step 6: Delivery Creation", phase: "Phase 3: Fulfilment & Logistics", input: "Sales order details, shipping data, delivery creation event.", output: "Delivery document number, delivery details, billing readiness flags.", exclusive: "Subscribes to events; proactively flags downstream billing issues (blocks, incomplete data) before they cause delays.", sapStandard: "VL01N (manual or background jobs); event-driven via output.", sapCustom: "Custom programs/scheduling for auto-delivery creation; user exits.", d365Standard: "Delivery creation from sales order (manual or auto).", d365Custom: "Power Automate flows on order events; custom AL extensions.", agentOpSummary: "Proactive billing blocker detection and event-driven monitoring." },
+        { name: "📦 Monitoring Agent", step: "Step 7: Picking & Packing", phase: "Phase 3: Fulfilment & Logistics", input: "Delivery document, warehouse / transfer order data, real-time status.", output: "Picking/packing completion status, delay alerts, exception logs.", exclusive: "Real-time anomaly detection, predicts delays using pattern analysis; autonomously triggers alerts or expedite actions.", sapStandard: "WM: LT03/LT12 or non-WM VL02N; RF scanner integration.", sapCustom: "Custom WM enhancements & workflows; real-time dashboards.", d365Standard: "Warehouse picking via warehouse management features.", d365Custom: "Power Automate + warehouse app integrations; custom flows.", agentOpSummary: "Predictive delay inference & proactive corrective actions." },
+        { name: "📦 Billing Agent (PGI)", step: "Step 8: Post Goods Issue", phase: "Phase 3: Fulfilment & Logistics", input: "Picking completion confirmation and delivery data.", output: "Goods issue posted, inventory & COGS updated, delivery status with financial impact.", exclusive: "Validates readiness for billing pre-PGI, triggers immediate billing agent handshake; synchronizes financial posting.", sapStandard: "VL02N posting (debits COGS, credits inventory); automatic FI impact.", sapCustom: "Background jobs & custom user exits; automated posting routines.", d365Standard: "Post shipment/delivery from warehouse.", d365Custom: "Custom flows for PGI automation; event-triggered updates.", agentOpSummary: "Triggers Billing Agent on PGI event, validates billing preconditions." },
+        { name: "✅ Billing Agent (Pre-Validation)", step: "Step 9: Billing Pre-Validation", phase: "Phase 4: Intelligent Billing", input: "Delivery data, sales order, POD (if required), customer master, tax info.", output: "Validation result (Pass/Fail), detailed audit trail & evidence, consolidated document data.", exclusive: "Dynamic multi-dimensional checklist (qty match, tax, POD availability, blocks) per context. Infers missing data autonomously. Human-interpretable audit trail.", sapStandard: "Basic checks in VF01 (blocks, pricing completeness).", sapCustom: "User exits/VOFM routines; custom ABAP checks.", d365Standard: "Basic validations during invoicing.", d365Custom: "Power Automate + custom AL pre-invoice workflows.", agentOpSummary: "Context-aware validation, intelligent POD fetch, full explainability." },
+        { name: "🧾 Billing Agent (Invoice Creation)", step: "Step 10: Invoice Creation", phase: "Phase 4: Intelligent Billing", input: "Validated delivery + order data after pre-validation.", output: "Invoice number, accounting document (AR debit & revenue), full invoice details.", exclusive: "Proceeds only after intelligent pre-validation; autonomous error handling & retry logic; handles partial/multiple deliveries.", sapStandard: "BAPI for VF01; posts AR debit & revenue.", sapCustom: "Custom billing routines & batch jobs; VF01 automation.", d365Standard: "Post sales invoice from delivery/order.", d365Custom: "Power Automate triggered invoicing; custom AL extensions.", agentOpSummary: "Self-validating invoice creation with autonomous retries." },
+        { name: "📧 Dispatch Agent (Orchestrator)", step: "Step 11: Invoice Dispatch", phase: "Phase 4: Intelligent Billing", input: "Invoice document data; output channel preferences.", output: "Dispatch status, aging clock started, dispatch timestamp, acknowledgment log.", exclusive: "Logs dispatch status, starts DSO aging clock, monitors delivery/acknowledgment intelligently.", sapStandard: "Output determination (email/EDI).", sapCustom: "Custom output programs & workflows; dynamic channel routing.", d365Standard: "Automatic invoice sending via email/portal.", d365Custom: "Power Automate for dispatch & tracking; custom templates.", agentOpSummary: "Smart dispatch with automated DSO clock activation and tracking." },
+        { name: "📈 Reporting Agent (AR Monitor)", step: "Step 12: Open Item Monitoring", phase: "Phase 5: Accounts Receivable Automation", input: "Open items, aging reports (FBL5N), customer ledger.", output: "Real-time KPIs (DSO, overdue buckets, risk exposure), predictive alerts, dashboard updates.", exclusive: "Predictive alerting on future delays based on payment patterns; autonomous dashboard updates; learns from historical collection cycles.", sapStandard: "FBL5N, aging reports (S_ALR_87012178).", sapCustom: "Custom reports & scheduled jobs; real-time analytics.", d365Standard: "Aging reports & customer ledger entries.", d365Custom: "Power BI + Power Automate dashboards; advanced analytics.", agentOpSummary: "Predictive open-item monitoring and proactive risk alerts." },
+        { name: "💰 Cash Application Agent", step: "Step 13-14: Payment Receipt & Cash App", phase: "Phase 5: Accounts Receivable Automation", input: "Bank statement / EBS, parsed remittance data (amount, reference, customer).", output: "Cleared invoices, dispute cases, suspense postings, updated open items.", exclusive: "Fuzzy/probabilistic ML matching (amount, date, name variants, context) that learns continuously. Handles exact, short-pay, overpay, no-match scenarios autonomously.", sapStandard: "F-28/F-32 exact reference matching; semi-manual for exceptions.", sapCustom: "Rule-based BAPI clearing; SAP Cash Application (ML, data-hungry).", d365Standard: "Cash receipt journal with auto-matching on references; advanced bank rec with Copilot AI assist.", d365Custom: "Power Automate + AI Builder for improved matching; custom logic for exceptions.", agentOpSummary: "Autonomous fuzzy matching, continuous learning, full scenario handling." },
+        { name: "⚖️ Dispute Agent", step: "Step 15: Dispute Handling", phase: "Phase 5: Accounts Receivable Automation", input: "Sales order, delivery, invoice, POD, payment details, deduction context.", output: "Dispute case ID, root-cause analysis, credit note (if auto-generated), evidence pack.", exclusive: "Autonomous timeline reconstruction (SO→Delivery→Invoice→Payment) with AI root-cause analysis; decides to auto-generate credit note (FB75) or escalate with full evidence pack.", sapStandard: "Manual UDM_DISPUTE case creation.", sapCustom: "Workflow auto-attach documents; BRF+ simple rules.", d365Standard: "Dispute/chargeback cases in collections.", d365Custom: "Power Automate for case creation & notifications; custom workflows.", agentOpSummary: "Full timeline reconstruction and AI-driven root-cause resolution." },
+        { name: "📞 Collections Agent", step: "Step 16: Dunning & Collections", phase: "Phase 5: Accounts Receivable Automation", input: "Aging data, risk scores, payment history, previous interactions.", output: "Personalized dunning actions (email, F150, Teams), collection logs, promise-to-pay updates.", exclusive: "Risk/behavior-driven personalized multi-channel outreach (email + F150 + Slack); learns optimal timing/tone per segment; synchronized SAP updates.", sapStandard: "F150 standardized batch letters; limited personalization.", sapCustom: "BTE for custom text/suppression; RPA emails; custom dunning logic.", d365Standard: "Collection letters, aging-based reminders, workflows.", d365Custom: "Power Automate multi-channel (email/Teams) reminders; AL extensions.", agentOpSummary: "Adaptive, personalized dunning strategy with learning engine." },
+        { name: "🔄 Credit Risk Agent (Continuous)", step: "Step 17: Continuous Credit Monitoring", phase: "Phase 6: Payment & Closure", input: "Live credit exposure, aging trends, each new transaction, external events.", output: "Dynamic credit limits, proactive block/hold decisions, revised risk scores.", exclusive: "Builds a living risk profile that learns from every payment, aging change, and external event. Dynamically updates limits & proactively blocks without batch processing.", sapStandard: "Batch FSCM monitoring & manual updates.", sapCustom: "Scheduled jobs for exposure updates; BRF+ for automated monitoring.", d365Standard: "Credit limit monitoring & holds.", d365Custom: "Power Automate periodic checks & updates; custom extensions.", agentOpSummary: "Real-time continuous learning risk engine with dynamic limit adaptation." },
+        { name: "✅ Closure Agent (Orchestrator/Reporting)", step: "Step 18: Invoice Fully Cleared", phase: "Phase 6: Payment & Closure", input: "Payment application / clearing result, invoice items.", output: "Closed invoice status, final DSO/KPI updates, customer risk score adjusted, closure notifications.", exclusive: "Marks lifecycle CLOSED; updates all KPIs & risk scores autonomously; triggers closure notifications & compliance reporting.", sapStandard: "Automatic clearing on payment application.", sapCustom: "Custom clearing programs; status propagation workflows.", d365Standard: "Automatic upon payment application.", d365Custom: "Power Automate status updates; custom AL close routines.", agentOpSummary: "Autonomous lifecycle closure, KPI refresh, and audit trail finalization." },
+        { name: "🔍 Reconciliation Agent (Orchestrator)", step: "Step 19: Bank Reconciliation", phase: "Phase 6: Payment & Closure", input: "Bank statement, posted financial documents (FI/AR entries).", output: "Reconciliation status, immutable narrative audit trail, compliance-ready dashboards.", exclusive: "Self-auditing with immutable narrative audit trail linking every decision across full PO-to-cash lifecycle. Real-time compliance-ready visibility & anomaly detection.", sapStandard: "FF67 manual/semi-auto; static reports; bank statement processing.", sapCustom: "Custom EBS programs & reports; automated reconciliation rules.", d365Standard: "Bank reconciliation with Copilot AI matching assist.", d365Custom: "Power Automate + Power BI enhanced recs; custom matching logic.", agentOpSummary: "End-to-end self-auditing with narrative trail and compliance visibility." }
+    ];
+
+    const phaseOrder = [
+        "Phase 1: Customer Validation/Onboarding & PO acceptance",
+        "Phase 2: Sales Order Processing",
+        "Phase 3: Fulfilment & Logistics",
+        "Phase 4: Intelligent Billing",
+        "Phase 5: Accounts Receivable Automation",
+        "Phase 6: Payment & Closure"
+    ];
+
+    // -------- CARDS TAB LOGIC ----------
+    let currentPhaseFilter = "all";
+    function renderCards() {
+        const container = document.getElementById("agentsGrid");
+        if (!container) return;
+        const filtered = currentPhaseFilter === "all" ? fullAgents : fullAgents.filter(a => a.phase === currentPhaseFilter);
+        if (filtered.length === 0) {
+            container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:3rem;">🤖 No agents for selected phase.</div>`;
+            return;
+        }
+        container.innerHTML = filtered.map(agent => `
+            <div class="agent-card">
+                <div class="card-top">
+                    <div class="agent-name">${agent.name}<span class="step-badge">${agent.step}</span></div>
+                    <div><span class="phase-tag">📌 ${agent.phase}</span></div>
+                </div>
+                <div class="card-body">
+                    <div class="io-block"><div class="io-label">📥 INPUT</div><div class="io-text">${agent.input}</div></div>
+                    <div class="process-compare">
+                        <div class="compare-item"><div class="compare-title exclusive">🚀 AGENT EXCLUSIVE</div><div class="desc-text">${agent.exclusive}</div></div>
+                        <div class="compare-item"><div class="compare-title sap-std">📌 Standard SAP</div><div class="desc-text">${agent.sapStandard}</div></div>
+                        <div class="compare-item"><div class="compare-title sap-cust">⚙️ Custom SAP + Automation</div><div class="desc-text">${agent.sapCustom}</div></div>
+                        <div class="compare-item"><div class="compare-title d365-std">💠 Standard D365 BC</div><div class="desc-text">${agent.d365Standard}</div></div>
+                        <div class="compare-item"><div class="compare-title d365-cust">🧩 Custom D365 BC + Automation</div><div class="desc-text">${agent.d365Custom}</div></div>
+                    </div>
+                    <div class="agent-op">🧠 Agentic operation: ${agent.agentOpSummary}</div>
+                    <div class="io-block"><div class="io-label">📤 OUTPUT</div><div class="io-text">${agent.output}</div></div>
+                </div>
+            </div>
+        `).join("");
+    }
+
+    function setupCardFilters() {
+        const btns = document.querySelectorAll("#phaseFilter .filter-btn");
+        btns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                btns.forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                currentPhaseFilter = btn.getAttribute("data-phase");
+                renderCards();
+            });
+        });
+    }
+
+    // -------- SWIMLANE DIAGRAM ----------
+    function renderSwimlane() {
+        const container = document.getElementById("swimlane-rows");
+        const headersContainer = document.getElementById("phaseHeadersContainer");
+        if (!container) return;
+        
+        headersContainer.innerHTML = phaseOrder.map(phase => {
+            let short = phase.replace("Phase 1: Customer Validation/Onboarding & PO acceptance", "Phase 1<br><small>Customer Validation &amp; PO</small>")
+                .replace("Phase 2: Sales Order Processing", "Phase 2<br><small>Sales Order Processing</small>")
+                .replace("Phase 3: Fulfilment & Logistics", "Phase 3<br><small>Fulfilment &amp; Logistics</small>")
+                .replace("Phase 4: Intelligent Billing", "Phase 4<br><small>Intelligent Billing</small>")
+                .replace("Phase 5: Accounts Receivable Automation", "Phase 5<br><small>AR Automation</small>")
+                .replace("Phase 6: Payment & Closure", "Phase 6<br><small>Payment &amp; Closure</small>");
+            return `<div class="phase-header">${short}</div>`;
+        }).join("");
+        
+        container.innerHTML = "";
+        fullAgents.forEach((agent, idx) => {
+            const phaseIdx = phaseOrder.indexOf(agent.phase);
+            let cells = "";
+            for (let i = 0; i < 6; i++) {
+                if (i === phaseIdx) {
+                    let inputShort = agent.input.length > 90 ? agent.input.substring(0, 87) + "..." : agent.input;
+                    let opShort = agent.agentOpSummary.length > 90 ? agent.agentOpSummary.substring(0, 87) + "..." : agent.agentOpSummary;
+                    let outputShort = agent.output.length > 90 ? agent.output.substring(0, 87) + "..." : agent.output;
+                    cells += `
+                        <div class="swimlane-cell" data-agent-index="${idx}" data-phase="${agent.phase}">
+                            <div class="cell-step">${agent.step}</div>
+                            <div class="cell-title">${agent.name}</div>
+                            <div class="cell-detail"><span class="io-pill io-in">INPUT</span> ${inputShort}</div>
+                            <div class="cell-detail"><span class="agentic-pill">⚡ AGENTIC OP</span> ${opShort}</div>
+                            <div class="cell-detail"><span class="io-pill io-out">OUTPUT</span> ${outputShort}</div>
+                        </div>`;
+                } else {
+                    cells += `<div class="swimlane-cell empty"></div>`;
+                }
+            }
+            container.innerHTML += `
+                <div class="swimlane-row">
+                    <div class="agent-lane-label">${agent.name}</div>
+                    ${cells}
+                </div>`;
+        });
+        
+        // attach click handlers
+        document.querySelectorAll(".swimlane-cell:not(.empty)").forEach(cell => {
+            cell.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const agentIdx = cell.getAttribute("data-agent-index");
+                if (agentIdx !== null && fullAgents[agentIdx]) {
+                    const targetPhase = fullAgents[agentIdx].phase;
+                    // switch to cards tab and highlight tab button in blue for 3 seconds
+                    const cardsTabBtn = document.getElementById("cardsTabBtn");
+                    if (cardsTabBtn) {
+                        cardsTabBtn.click();  // activate cards tab
+                        cardsTabBtn.classList.add("tab-highlight");
+                        setTimeout(() => {
+                            cardsTabBtn.classList.remove("tab-highlight");
+                        }, 3000);
+                    }
+                    // set filter to target phase
+                    const phaseFilterBtn = Array.from(document.querySelectorAll("#phaseFilter .filter-btn")).find(btn => btn.getAttribute("data-phase") === targetPhase);
+                    if (phaseFilterBtn) {
+                        phaseFilterBtn.click();
+                        // scroll to first card after filter
+                        setTimeout(() => {
+                            const firstCard = document.querySelector(".agent-card");
+                            if (firstCard) firstCard.scrollIntoView({ behavior: "smooth", block: "start" });
+                        }, 200);
+                    }
+                }
+            });
+        });
+    }
+
+    // -------- TAB SWITCHING ----------
+    function initTabs() {
+        const tabs = document.querySelectorAll(".tab-btn");
+        tabs.forEach(tab => {
+            tab.addEventListener("click", () => {
+                const tabId = tab.getAttribute("data-tab");
+                tabs.forEach(t => t.classList.remove("active"));
+                tab.classList.add("active");
+                document.querySelectorAll(".tab-content").forEach(tc => tc.classList.remove("active-tab"));
+                if (tabId === "cards") {
+                    document.getElementById("cardsTab").classList.add("active-tab");
+                } else {
+                    document.getElementById("swimlaneTab").classList.add("active-tab");
+                    if (!window._swimlaneBuilt) {
+                        renderSwimlane();
+                        window._swimlaneBuilt = true;
+                    }
+                }
+            });
+        });
+    }
+
+    renderCards();
+    setupCardFilters();
+    initTabs();
+</script>
+</body>
+</html>
